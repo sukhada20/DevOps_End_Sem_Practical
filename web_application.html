@@ -145,13 +145,139 @@
             <div class="card">
                 <h3>Let's build something together</h3>
                 <p>Reach out for collaborations, open source work, or new web development projects.</p>
-                <p>Email: <a href="mailto:sukhadabhoyar@gmail.com" style="color: var(--accent); text-decoration: none;">sukhadabhoyar@gmail.com</a></p>
+                
+                <form id="contactForm" style="margin-top: 24px;">
+                    <div style="margin-bottom: 16px;">
+                        <label for="fullName" style="display: block; margin-bottom: 6px; font-weight: 500;">Full Name</label>
+                        <input id="fullName" name="fullName" type="text" placeholder="Sukhada Bhoyar" 
+                            style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.3); 
+                            background: rgba(255, 255, 255, 0.05); color: var(--text); font-size: 1rem;" required/>
+                    </div>
+                    
+                    <div style="margin-bottom: 16px;">
+                        <label for="emailAddress" style="display: block; margin-bottom: 6px; font-weight: 500;">Email Address</label>
+                        <input id="emailAddress" name="email" type="email" placeholder="your.email@example.com" 
+                            style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.3); 
+                            background: rgba(255, 255, 255, 0.05); color: var(--text); font-size: 1rem;" required/>
+                    </div>
+                    
+                    <div style="margin-bottom: 16px;">
+                        <label for="projectType" style="display: block; margin-bottom: 6px; font-weight: 500;">Project Type</label>
+                        <select id="projectType" name="projectType" 
+                            style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.3); 
+                            background: rgba(255, 255, 255, 0.05); color: var(--text); font-size: 1rem;">
+                            <option value="">Select a project type</option>
+                            <option value="website">Website Development</option>
+                            <option value="webapp">Web Application</option>
+                            <option value="consultation">Consultation</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div style="margin-bottom: 16px;">
+                        <label for="messageBox" style="display: block; margin-bottom: 6px; font-weight: 500;">Message</label>
+                        <textarea id="messageBox" name="message" placeholder="Tell me about your project..." rows="5" 
+                            style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.3); 
+                            background: rgba(255, 255, 255, 0.05); color: var(--text); font-size: 1rem; font-family: inherit;" required></textarea>
+                    </div>
+                    
+                    <div style="margin-bottom: 16px;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input id="agreeCheckbox" name="agree" type="checkbox" 
+                                style="width: 18px; height: 18px; cursor: pointer;" required/>
+                            <span>I agree to be contacted about this project</span>
+                        </label>
+                    </div>
+                    
+                    <div style="margin-bottom: 16px;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input id="newsletterCheckbox" name="newsletter" type="checkbox" 
+                                style="width: 18px; height: 18px; cursor: pointer;"/>
+                            <span>Subscribe to my newsletter for updates</span>
+                        </label>
+                    </div>
+                    
+                    <button id="submitBtn" type="submit" 
+                        style="padding: 12px 24px; border-radius: 8px; background: var(--accent); color: #fff; 
+                        border: none; cursor: pointer; font-size: 1rem; font-weight: 500; transition: transform 0.2s ease;">
+                        Send Message
+                    </button>
+                    
+                    <div id="formMessage" style="margin-top: 12px; padding: 12px; border-radius: 8px; display: none;"></div>
+                </form>
             </div>
         </section>
-
+    
         <footer>
             Built with HTML and CSS • Inspired by GitHub portfolio style
         </footer>
     </div>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('emailAddress').value.trim();
+            const projectType = document.getElementById('projectType').value;
+            const message = document.getElementById('messageBox').value.trim();
+            const agreeCheckbox = document.getElementById('agreeCheckbox').checked;
+            
+            const messageDiv = document.getElementById('formMessage');
+            
+            // Validation
+            if (!fullName) {
+                showMessage('Please enter your full name', 'error');
+                return;
+            }
+            
+            if (!email || !email.includes('@')) {
+                showMessage('Please enter a valid email address', 'error');
+                return;
+            }
+            
+            if (!projectType) {
+                showMessage('Please select a project type', 'error');
+                return;
+            }
+            
+            if (!message) {
+                showMessage('Please enter your message', 'error');
+                return;
+            }
+            
+            if (!agreeCheckbox) {
+                showMessage('Please agree to be contacted', 'error');
+                return;
+            }
+            
+            // Success
+            showMessage('Thank you for your message! I will get back to you soon.', 'success');
+            this.reset();
+            
+            // Log form data (useful for testing)
+            console.log({
+                fullName: fullName,
+                email: email,
+                projectType: projectType,
+                message: message,
+                newsletter: document.getElementById('newsletterCheckbox').checked,
+                timestamp: new Date().toISOString()
+            });
+        });
+        
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('formMessage');
+            messageDiv.textContent = text;
+            messageDiv.style.display = 'block';
+            messageDiv.style.backgroundColor = type === 'success' 
+                ? 'rgba(34, 197, 94, 0.2)' 
+                : 'rgba(239, 68, 68, 0.2)';
+            messageDiv.style.borderLeft = type === 'success' 
+                ? '4px solid #22c55e' 
+                : '4px solid #ef4444';
+            messageDiv.style.color = type === 'success' ? '#86efac' : '#fca5a5';
+        }
+    </script>
 </body>
 </html>
